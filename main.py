@@ -75,11 +75,19 @@ def draw(window, array, array_size, WIDTH):
     pygame.display.update()
 
 
+# Merge Sort
+def mergeSort(draw, array):
+    pass
+
+
 # Insertion Sort
 def insertionSort(draw, array):
     for i in range(1, len(array)):
         j = i
-        while array[j] > array[j - 1] and j > 0:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+        while array[j] < array[j - 1] and j > 0:
             pygame.time.delay(2)
             Element.currentlyComparing(array[j], array[j - 1])
             draw()
@@ -109,11 +117,11 @@ def selectionSort(draw, array):
             pygame.time.delay(5)
             Element.currentlyComparing(array[i], array[j])
             draw()
-            if array[j] > temp:
+            if array[j] < temp:
                 temp = array[j]
                 index = j
             Element.doneComparing(array[i], array[j])
-        if temp > array[i]:
+        if temp < array[i]:
             pygame.time.delay(2)
             Element.toSwap(array[i], array[index])
             draw()
@@ -135,7 +143,7 @@ def bubbleSort(draw, array):
                     pygame.quit()
             Element.currentlyComparing(array[i], array[j])
             draw()
-            if array[i] > array[j]:
+            if array[i] < array[j]:
                 Element.toSwap(array[i], array[j])
                 draw()
                 array[i], array[j] = Element.swap(array[i], array[j])
@@ -147,8 +155,9 @@ def bubbleSort(draw, array):
 # Choose which algorithm you want to visualize
 def algorithm(draw, array):
     # bubbleSort(draw, array)
-    selectionSort(draw, array)
-    # insertionSort(draw, array)
+    # selectionSort(draw, array)
+    insertionSort(draw, array)
+    # mergeSort(draw, array)
 
 
 # Creating the input array object
@@ -162,6 +171,7 @@ def buildArray(my_list, array_size, WIDTH):
 # Returns a random list
 def createList():
     length = random.choice([i for i in range(30, 100)])
+    print(length)
     while WIDTH % length != 0:
         length = random.choice([i for i in range(30, 100)])
     my_list = [i + 1 for i in range(length)]
