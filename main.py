@@ -62,22 +62,28 @@ class Element:
         element1.height, element2.height = element2.height, element1.height
         return element1, element2
 
+    @staticmethod
+    def transformElement(one, other, index):
+        one.int_value, one.height, one.index = other.int_value, other.height, index
+
     def __gt__(self, other):
         return self.int_value > other.int_value
 
     def __lt__(self, other):
         return self.int_value < other.int_value
 
+    def __le__(self, other):
+        return self.int_value <= other.int_value
+
+    def __ge__(self, other):
+        return self.int_value >= other.int_value
+
 
 def draw(window, array, array_size, WIDTH):
+    window.fill(RED)
     for element in array:
         element.draw(window)
     pygame.display.update()
-
-
-# Merge Sort
-def mergeSort(draw, array):
-    pass
 
 
 # Insertion Sort
@@ -88,20 +94,14 @@ def insertionSort(draw, array):
             if event.type == pygame.QUIT:
                 pygame.quit()
         while array[j] < array[j - 1] and j > 0:
-            pygame.time.delay(2)
             Element.currentlyComparing(array[j], array[j - 1])
             draw()
-            pygame.time.delay(2)
             Element.toSwap(array[j], array[j - 1])
-            pygame.time.delay(2)
             draw()
             array[j], array[j - 1] = Element.swap(array[j], array[j - 1])
-            pygame.time.delay(2)
             draw()
-            pygame.time.delay(2)
             Element.doneComparing(array[j], array[j - 1])
             draw()
-            pygame.time.delay(2)
             j -= 1
 
 
@@ -114,7 +114,6 @@ def selectionSort(draw, array):
         temp = array[i]
         index = i
         for j in range(i + 1, len(array)):
-            pygame.time.delay(5)
             Element.currentlyComparing(array[i], array[j])
             draw()
             if array[j] < temp:
@@ -122,16 +121,12 @@ def selectionSort(draw, array):
                 index = j
             Element.doneComparing(array[i], array[j])
         if temp < array[i]:
-            pygame.time.delay(2)
             Element.toSwap(array[i], array[index])
             draw()
-            pygame.time.delay(2)
             array[i], array[index] = Element.swap(array[i], array[index])
             draw()
-            pygame.time.delay(2)
             Element.doneComparing(array[i], array[index])
             draw()
-            pygame.time.delay(2)
 
 
 # Bubble Sort
@@ -143,7 +138,7 @@ def bubbleSort(draw, array):
                     pygame.quit()
             Element.currentlyComparing(array[i], array[j])
             draw()
-            if array[i] < array[j]:
+            if array[i] > array[j]:
                 Element.toSwap(array[i], array[j])
                 draw()
                 array[i], array[j] = Element.swap(array[i], array[j])
@@ -152,12 +147,63 @@ def bubbleSort(draw, array):
             draw()
 
 
+# Merge Sort
+def mergeSort(draw, array):
+    length = len(array)
+    temp = [None for i in range(length)]
+    k = 1
+    while k < length:
+        for left in range(0, length - k, k * 2):
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+            right = left + k
+            right_end = right + k
+            if right_end > length:
+                right_end = length
+            index, i, j = left, left, right
+            while i < right and j < right_end:
+                Element.currentlyComparing(array[i], array[j])
+                draw()
+                if array[i] < array[j]:
+                    temp[index] = array[i].int_value
+                    Element.doneComparing(array[i], array[j])
+                    draw()
+                    i += 1
+                else:
+                    temp[index] = array[j].int_value
+                    Element.doneComparing(array[i], array[j])
+                    draw()
+                    j += 1
+                index += 1
+            while i < right:
+                temp[index] = array[i].int_value
+                i += 1
+                index += 1
+            while j < left:
+                temp[index] = array[j].int_value
+                j += 1
+                index += 1
+            for index in range(left, right_end):
+                if temp[index]:
+                    array[index] = Element(
+                        temp[index],
+                        index,
+                        len(array),
+                        array[index].largest_element,
+                    )
+                pygame.time.delay(20)
+                draw()
+            draw()
+        k *= 2
+
+
 # Choose which algorithm you want to visualize
 def algorithm(draw, array):
     # bubbleSort(draw, array)
     # selectionSort(draw, array)
-    insertionSort(draw, array)
-    # mergeSort(draw, array)
+    # insertionSort(draw, array)
+    mergeSort(draw, array)
 
 
 # Creating the input array object
@@ -170,10 +216,9 @@ def buildArray(my_list, array_size, WIDTH):
 
 # Returns a random list
 def createList():
-    length = random.choice([i for i in range(30, 100)])
-    print(length)
+    length = random.choice([i for i in range(90, 151)])
     while WIDTH % length != 0:
-        length = random.choice([i for i in range(30, 100)])
+        length = random.choice([i for i in range(90, 151)])
     my_list = [i + 1 for i in range(length)]
     random.shuffle(my_list)
     return my_list
