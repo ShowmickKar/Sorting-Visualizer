@@ -19,6 +19,13 @@ GREY = (128, 128, 128)
 CYAN = (0, 255, 255)
 
 
+def draw(window, array, array_size, WIDTH):
+    window.fill(BLACK)
+    for element in array:
+        element.draw(window)
+    pygame.display.update()
+
+
 class Element:
     def __init__(self, int_value, index, array_size, largest_element):
         self.int_value = int_value
@@ -26,7 +33,7 @@ class Element:
         self.width = WIDTH // array_size
         self.array_size = array_size
         self.poistion = self.index * self.width
-        self.color = CYAN
+        self.color = WHITE
         self.largest_element = largest_element
         self.max_height = WIDTH
         self.height = (self.int_value * WIDTH) // self.largest_element
@@ -38,11 +45,11 @@ class Element:
 
     @staticmethod
     def currentlyComparing(element1, element2):
-        element1.color, element2.color = GREEN, GREEN
+        element1.color, element2.color = RED, RED
 
     @staticmethod
     def doneComparing(element1, element2):
-        element1.color, element2.color = CYAN, CYAN
+        element1.color, element2.color = WHITE, WHITE
 
     @staticmethod
     def toSwap(element1, element2):
