@@ -5,6 +5,7 @@ import random
 import time
 import pygame
 from element import Element
+from element import draw
 from merge_sort import mergeSort
 from bubble_sort import bubbleSort
 from selection_sort import selectionSort
@@ -19,25 +20,12 @@ window = pygame.display.set_mode((HEIGHT, WIDTH))
 pygame.display.set_caption("Sorting Visualizer")
 
 
-# Define Window Color
-RED = (255, 0, 0)
-
-window.fill(RED)
-
-# Function to draw the array
-def draw(window, array, array_size, WIDTH):
-    window.fill(RED)
-    for element in array:
-        element.draw(window)
-    pygame.display.update()
-
-
 # Choose which algorithm you want to visualize
 def algorithm(draw, array):
     # bubbleSort(draw, array)
     # selectionSort(draw, array)
-    # insertionSort(draw, array)
-    mergeSort(draw, array)
+    insertionSort(draw, array)
+    # mergeSort(draw, array)
 
 
 # Creating the input array object
@@ -79,11 +67,11 @@ def main(window, WIDTH):
                     algorithm(lambda: draw(window, array, array_size, WIDTH), array)
                     started = False
                 if event.key == pygame.K_c:
-                    window.fill(RED)
                     started = False
                     my_list = createList()
                     array_size = len(my_list)
                     array = buildArray(my_list, array_size, WIDTH)
+                    draw(window, array, array_size, WIDTH)
                     pygame.display.update()
     pygame.quit()
 
