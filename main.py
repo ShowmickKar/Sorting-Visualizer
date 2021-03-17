@@ -24,8 +24,8 @@ pygame.display.set_caption("Sorting Visualizer")
 def algorithm(draw, array):
     # bubbleSort(draw, array)
     # selectionSort(draw, array)
-    insertionSort(draw, array)
-    # mergeSort(draw, array)
+    # insertionSort(draw, array)
+    mergeSort(draw, array)
 
 
 # Creating the input array object
